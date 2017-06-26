@@ -21,8 +21,6 @@ class PhotoGallery extends Component{
         //     shouldFinish = finishFirst(paintingBoard[curtPhoto.id].layers, curtTag);
         // }
 
-
-
         return (
             <nav className="navbar navbar-inverse navbar-static-top">
                 <div className="container imglist">

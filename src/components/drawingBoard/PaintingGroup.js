@@ -3,7 +3,7 @@ let {Stage, Layer, Circle, Line, Image} = KV;
 import {
     drawImgCenter
 } from 'util/KonvaUtil';
-
+import {hintFinish, finishFirst} from 'common/util/Util';
 import ClosedPrompt from './ClosedPrompt';
 
 import PaintingLayer from './PaintingLayer';
@@ -50,6 +50,11 @@ export default class PaintingGroup extends Component{
         //     return;
         // }
         if(layer.closed) return;
+
+        if(holdingLayerID){
+            hintFinish();
+            return;
+        }
 
         let {x,y} = this.getPointerPosition();
 
@@ -209,7 +214,6 @@ export default class PaintingGroup extends Component{
                         // console.log(selectedTag, className);
                         if(className==='Line' ) return;
                         if(selectedTag &&  (className==='Image') ){
-                            
                             selectShape(null);
                             return;
                         }
@@ -220,13 +224,16 @@ export default class PaintingGroup extends Component{
                         }else{
                             if(this.clickTime===0){
                                 this.mark(ev);
-                                if(!selectedTag){
+                                // console.log('h1');
+                                if(!selectedTag && !holdingLayerID){
                                     this.clickTime++;
                                 }
                             }else{
+                                // console.log(this.clickTime);
                                 addTempLayer();
+                                // console.log(h2);
                                 fixLayerHold(curtTag);
-                                if(!selectedTag){
+                                if(!selectedTag && !holdingLayerID){
                                     this.clickTime=0;
                                 }
 
@@ -243,7 +250,7 @@ export default class PaintingGroup extends Component{
                             if(shape===0) return;
                             if(!curtlayer) return;
                             if(this.clickTime!==1) return;
-
+                            if(holdingLayerID) return;
                             let calcParm = this.calcParm;
                             let {x,y} = this.getPointerPosition();
                             let i = 0 ;

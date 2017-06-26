@@ -62,10 +62,10 @@ export const addSpot = (x, y, calcParm) => (dispatch, getState)=> {
     let curtPhotoID = getState().curtPhoto.id;
     let {curtTag: curtTagID, holdingLayerID} = getState().paintingBoard[curtPhotoID];
 
-    if(holdingLayerID){
-        hintFinish();
-        return;
-    }
+    // if(holdingLayerID){
+    //     hintFinish();
+    //     return;
+    // }
 
     dispatch({
         type: ADD_SPOT,
