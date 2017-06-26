@@ -39,22 +39,15 @@ class Board extends Component{
 
     render(){
 
-        let { paintingBoard, curtPhoto, actions, tagsBoard } = this.props;
+        let { paintingBoard, curtPhoto, actions, shape, stage } = this.props;
 
         let {id: curtPhotoID} = curtPhoto;
 
-        let layersData = paintingBoard[curtPhotoID];
+        let layersGroup = paintingBoard[curtPhotoID];
 
-        let PG = null;
-
-        let curtTag = null;
-
-        if(tagsBoard && tagsBoard[curtPhotoID]){
-            curtTag = tagsBoard[curtPhotoID].curtTag;
-        }
+        if(!layersGroup) return null;
 
         let {image} = this.state;
-
 
         return (
             <div
@@ -63,9 +56,10 @@ class Board extends Component{
             >
                 <PaintingGroup
                     {...{
-                        layersData,
-                        curtTag,
-                        image
+                        layersGroup,
+                        image,
+                        shape,
+                        stage
                     }}
                     {...actions}
                 />
@@ -76,13 +70,14 @@ class Board extends Component{
 
 export default connect(
     state => {
-        let {curtPhoto, paintingBoard, photosData, tagsBoard} = state;
+        let {curtPhoto, paintingBoard, photosData, shape, stage} = state;
         return {
             curtPhoto,
             paintingBoard,
             photosData,
-            tagsBoard
+            shape,
+            stage
         }
     },
-    dispatch => ({actions: bindActionCreators(actionCreators, dispatch)})
+    dispatch => ({actions: bindActionCreators({...actionCreators}, dispatch)})
 )(Board);

@@ -18,7 +18,7 @@ export function drawImgCenter(imgW, imgH, cvsW, cvsH){
     // 第一种情况 图片的宽度比高度大
 
     if(imgW >= imgH){
-        res.w = Math.min(imgW, cvsW);
+        res.w = cvsW;
         res.h = res.w / scale;
         res.x = (cvsW - res.w) / 2;
         res.y = (cvsH - res.h) / 2;
@@ -27,7 +27,7 @@ export function drawImgCenter(imgW, imgH, cvsW, cvsH){
 
     // 第二种情况 图片的高度比宽度大
     if(imgW <= imgH){
-        res.h = Math.min(imgH, cvsH);
+        res.h = cvsH;
         res.w = res.h * scale;
         res.x = (cvsW - res.w) / 2;
         res.y = (cvsH - res.h) / 2;

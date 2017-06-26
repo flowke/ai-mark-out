@@ -1,11 +1,18 @@
 
 import S from './style.scss';
-
-export default function Tag({id, tagName, curtPhotoID, switchTag, active}){
+import { hintFinish } from 'common/util/Util.js';
+export default function Tag({id, tagName, active, selectShape, fixLayerHold, fixShapeFill}){
 
     return (
         <div className={active ? S.active : ''}
-            onClick={ev=>switchTag(curtPhotoID, id)}
+            onClick={ev=>{
+                selectShape(id);
+            }}
+            onDoubleClick={ev=>{
+                fixLayerHold(id);
+            }}
+            onMouseOver={ev=>fixShapeFill(true, id)}
+            onMouseOut={ev=>fixShapeFill(false, id)}
         >{tagName}</div>
     );
 }

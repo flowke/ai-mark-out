@@ -1,91 +1,247 @@
 
-const { Image, Layer, Line, Circle } = KV;
-
+const { Image, Layer, Line, Circle, Canvas, Group } = KV;
 
 export default class PaintingLayer extends Component{
     constructor(props){
         super(props);
 
-        this.state = {
-            headCircleStroke: null,
-            strokeWidth: 0
-        }
-        this.headCircleOver = this.headCircleOver.bind(this);
-        this.headCircleOut = this.headCircleOut.bind(this);
+        this.curtCircle = null;
+
+        let canvas = this.canvas = document.createElement('canvas');
+        canvas.width = props.stageWidth;
+        canvas.height = props.stageHeight;
+
     }
 
-    headCircleOver(){
-
-        let {curtTag, fixFirstSpotHit} = this.props;
-
-        fixFirstSpotHit(true, curtTag);
-        this.setState({
-            headCircleStroke: 'grey',
-            strokeWidth: 10
-        });
-    }
-    headCircleOut(){
-        let {curtTag, fixFirstSpotHit} = this.props;
-        this.setState({
-            headCircleStroke: null,
-            strokeWidth: 0
-        });
-        fixFirstSpotHit(false, curtTag);
-    }
 
     render(){
 
+        let {
+            points, fill, closed, layerID, curtTag, pointMove, fixFirstSpotHit, lineColor, calcParm,
+            stageWidth, stageHeight, overPointIndex, shape, moveShape, fixShapeFill, selectedTag, selectShape, shapeType, fixLayerHold, getPointerPosition
+        } = this.props;
 
-        let {points, fill, closed, id, curtTag, fixFirstSpotHit} = this.props;
+        let linePoints = [];
 
-        let {strockWidth, headCircleStroke} = this.state;
-
-        let {headCircleOver, headCircleOut} = this;
-
-        let spots = null;
-
-        points.forEach((elt, i)=>{
-
-            if(!spots) { spots = [] };
-
-            if(i%2 !== 0) return;
-
-            let x = points[i],
-                y = points[i+1];
-
-            let circle = (
-                <Circle
-                    key={i}
-                    onMouseOver={ ev => (i===0 ? headCircleOver() : null)}
-                    onMouseOut={ev => (i===0 ? headCircleOut() : null)}
-                    {...{
-                        x,
-                        y,
-                        radius: 4,
-                        fill: 'grey',
-                        stroke: i===0 ? headCircleStroke : null,
-                        strokeWidth:50
-                    }}
-                />
-            );
-
-            spots.push(circle);
+        points.forEach(elt=>{
+            linePoints.push(elt.x, elt.y);
         });
 
+        let pointsComp = null;
+
+        if(layerID === curtTag || layerID === selectedTag){
+            pointsComp = points.map((point, i)=>{
+
+                let {x, y} = point;
+
+                return (
+                    <Circle
+                        key={i}
+                        ref={`Circle${i}`}
+                        onMouseOver={ ev => {
+                            if(shape===0 && i===0){
+                                fixFirstSpotHit(true, i);
+
+                            }else{
+                                fixFirstSpotHit(false, i);
+                            }
+
+                        }}
+
+                        onMouseOut={ev => {
+                            fixFirstSpotHit(false, null);
+
+                        }}
+
+                        {...{
+                            x,
+                            y,
+                            radius: overPointIndex===i ? 8 : 6,
+                            fill: overPointIndex ===0 && i===0 && !closed ? null:'#00ff00',
+                            stroke: '#ff0000',
+                            strokeWidth: 3,
+                            draggable: true
+                        }}
+
+                        onDragMove={ev=>{
+                            let {x,y} = ev.target.attrs;
+
+                            if(x<4 || x > (stageWidth -4) || y<4 || y > (stageHeight-4)) return;
+                            pointMove( i, x, y, calcParm);
+                            if(shapeType===1){
+                                switch (i) {
+                                    case 0:
+                                        pointMove( 1, null, y, calcParm);
+                                        pointMove( 3, x, null, calcParm);
+                                        break;
+                                    case 1:
+                                        pointMove( 0, null, y, calcParm);
+                                        pointMove( 2, x, null, calcParm);
+                                        break;
+                                    case 2:
+                                        pointMove( 1, x, null, calcParm);
+                                        pointMove( 3, null, y, calcParm);
+                                        break;
+                                    case 3:
+                                        pointMove( 0, x, null, calcParm);
+                                        pointMove( 2, null, y, calcParm);
+                                        break;
+                                    default:
+
+                                }
+                            }
+
+                        }}
+                        dragBoundFunc={
+                            ({x, y})=>{
+
+                                if(x<4){
+                                    x=4;
+                                }
+
+                                if(x>stageWidth-4){
+                                    x=stageWidth-4;
+                                }
+
+                                if(y<4){
+                                    y=4;
+                                }
+
+                                if(y>stageHeight-4){
+                                    y=stageHeight-4;
+                                }
+
+                                return {
+                                    x, y
+                                }
+                            }
+                        }
+                    />
+                );
+            });
+        }else{
+            pointsComp = null;
+        }
+
         return (
-            <Layer
-            >
+            <Layer>
+                {
+                    selectedTag? (
+                        <Image
+                            {...{
+                                    width: stageWidth,
+                                    height: stageHeight,
+                                    // image: this.canvas
+                                    // fill: 'red'
+                            }}
+                            onMouseMove={ev=>{
+                                // console.log(ev.target.className);
+                                if(!this.offsetDistence) return;
+                                moveShape(this.offsetDistence, getPointerPosition(), layerID);
+                            }}
+                        />
+                    ) : null
+                }
                 <Line
                     {...{
-                        points,
-                        stroke: 'blue',
-                        strokeWidth: 2,
-                        lineJoin: 'round',
-                        closed,
-                        fill
+                            points:linePoints,
+                            stroke: lineColor,
+                            strokeWidth: 4,
+                            lineJoin: 'round',
+                            closed,
+                            fill : fill || selectedTag ===layerID ? 'rgba(255,0,0,0.3)': null ,
+                            listening: selectedTag ===layerID ? true : false
+                    }}
+                    // onMouseOver={ev=>{
+                    //     // fixShapeFill(true, layerID)
+                    // }
+                    // }
+                    // onMouseOut={ev=>fixShapeFill(false, layerID)}
+                    // onClick={ev=>{
+                    //
+                    //     selectShape(layerID);
+                    // }}
+
+                    onMouseDown={ev=>{
+                        let pos = getPointerPosition();
+                        this.offsetDistence = points.map(point=>{
+                            return {
+                                    x: pos.x-point.x,
+                                    y: pos.y-point.y
+                            }
+                        });
+                            // console.log(this.offsetDistence);
+                    }}
+
+                    onMouseUp={ev=>{
+                            this.offsetDistence = null;
+                    }}
+
+                    onDblClick={
+                        ev=>{
+                            fixLayerHold(layerID)
+                        }
+                    }
+                    onMouseMove={ev=>{
+                        if(!this.offsetDistence) return;
+                        moveShape(this.offsetDistence, getPointerPosition(), layerID);
                     }}
                 />
-                {spots}
+
+                {/* <Line
+                    {...{
+                        points:[...linePoints, linePoints[0], linePoints[1]],
+                        stroke: 'red',
+                        strokeWidth: 14,
+                        opacity: 0
+                    }}
+                    onMouseOver={ev=>{
+                        fixShapeFill(true, layerID);
+                                    // console.log('over');
+                    }}
+                    onMouseOut={ev=>fixShapeFill(false, layerID)}
+                    onClick={ev=>{
+
+                        if(selectedTag) return;
+
+                        selectShape(layerID);
+                    }}
+                    onDblClick={
+                        ev=>{
+                            fixLayerHold(layerID)
+                        }
+                    }
+                /> */}
+
+                {
+                    closed? (
+                        <Line
+                            {...{
+                                    points:[...linePoints, linePoints[0], linePoints[1]],
+                                    stroke: 'red',
+                                    strokeWidth: 14,
+                                    opacity: 0
+                            }}
+                            onMouseOver={ev=>{
+                                fixShapeFill(true, layerID);
+                                    // console.log('over');
+                            }}
+                            onMouseOut={ev=>fixShapeFill(false, layerID)}
+                            onClick={ev=>{
+
+                                selectShape(layerID);
+                            }}
+                            onDblClick={
+                                ev=>{
+                                    fixLayerHold(layerID)
+                                }
+                            }
+                        />
+                    ) : null
+                }
+
+                {pointsComp}
+
             </Layer>
         );
     }

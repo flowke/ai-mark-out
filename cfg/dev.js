@@ -13,19 +13,13 @@ let config = Object.assign({}, dfConfig, {
         hot: true
     },
 
-    plugins: [
+    plugins: [ ...dfConfig.plugins,
         new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
             filename: '../index.html',
             template: './src/index.html'
         }),
-        new webpack.ProvidePlugin({
-            React: 'react',
-            ReactDOM: 'react-dom',
-            Component: ['react', 'Component'],
-            PT: 'prop-types',
-            KV: 'react-konva'
-        }),
+    
         new webpack.NoEmitOnErrorsPlugin()
         // new OpenBrowser({url: `http://localhost:${9000}`})
     ],

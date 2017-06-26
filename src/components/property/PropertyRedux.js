@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 const ADD_TAG = 'ADD_TAGSSS';
 const SWITCH_TAG = 'SWITCH_TAGSSS';
-import {addLayer} from 'drawingBoard/BoardRedux';
+import {addTempLayer} from 'drawingBoard/BoardRedux';
 const initState = {};
 
 // initState: {
@@ -16,17 +16,21 @@ const initState = {};
 //     tagName:
 // }
 
-export const addTag = (curtPhotoID, tag) => (dispatch, getStage)=> {
+export const addTag = () => (dispatch, getStage)=> {
 
     let {id} = getStage().curtPhoto;
 
-    dispatch(addLayer(id, tag.id));
+    let tag = {id: Math.random(), tagName: `图层:${Math.random().toString().slice(2,6)}`};
 
     dispatch({
         type: ADD_TAG,
-        curtPhotoID,
+        curtPhotoID:id,
         tag
     });
+
+    dispatch(addTempLayer(id, tag.id));
+
+    // dispatch(switchTag(id, tag.id));
 }
 
 export function switchTag(curtPhotoID,id) {
@@ -52,17 +56,18 @@ export default function tagsBoard(state=initState, action){
 
             let curtTag = null;
 
-            if(!tagsGroup.curtTag){
-                return {...state, ...{
-                    [curtPhotoID]: {...tagsGroup, ...{
-                        tags: [tag, ...tags],
-                        curtTag: tag.id
-                    }}
-                }};
-            }
+            // if(!tagsGroup.curtTag){
+            //
+            //     return {...state, ...{
+            //         [curtPhotoID]: {...tagsGroup, ...{
+            //             tags: [tag, ...tags],
+            //             curtTag: tag.id
+            //         }}
+            //     }};
+            // }
 
             return {...state, ...{
-                [curtPhotoID]: {...tagsGroup, ...{tags: [tag, ...tags]}}
+                [curtPhotoID]: {...tagsGroup, ...{tags: [tag, ...tags], curtTag: tag.id}}
             }};
 
         case SWITCH_TAG:

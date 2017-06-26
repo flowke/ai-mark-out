@@ -24,20 +24,13 @@ let config = Object.assign({}, dfConfig, {
 
     entry: {
         app: './src/app.js',
-        common: ['react', 'react-dom', 'react-konva', 'redux', 'redux-thunk', 'react-redux']
+        common: ['react', 'react-dom', 'react-konva', 'redux', 'redux-thunk', 'react-redux', 'react-router-redux', 'react-router']
     },
 
-    plugins: [
+    plugins: [ ...dfConfig.plugins,
         new HtmlWebpackPlugin({
             filename: '../index.html',
             template: './src/index.html'
-        }),
-        new webpack.ProvidePlugin({
-            React: 'react',
-            ReactDOM: 'react-dom',
-            Component: ['react', 'Component'],
-            PT: 'prop-types',
-            KV: 'react-konva'
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'common',

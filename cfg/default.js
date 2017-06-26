@@ -1,6 +1,6 @@
 const BabiliPlugin = require("babili-webpack-plugin");
 const path = require('path');
-
+const webpack = require('webpack');
 let dfPath = {
     src: path.resolve(__dirname, '../src'),
     dist: path.resolve(__dirname, '../dist'),
@@ -58,7 +58,14 @@ let dfConfig = {
         ]
     },
     plugins: [
-        new BabiliPlugin()
+        new webpack.ProvidePlugin({
+            React: 'react',
+            ReactDOM: 'react-dom',
+            Component: ['react', 'Component'],
+            PT: 'prop-types',
+            KV: 'react-konva',
+            push: ['react-router-redux', 'push']
+        }),
         // new OpenBrowser({url: `http://localhost:${9000}`})
     ],
 }

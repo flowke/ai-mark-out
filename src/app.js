@@ -3,7 +3,11 @@ require('font-awesome/css/font-awesome.min.css');
 require('style/main.scss');
 import {Provider, connect} from 'react-redux';
 import {bindActionCreators, combineReducers} from 'redux';
-import configureStore from 'reduxes/configureStore';
+import { Route } from 'react-router';
+import { ConnectedRouter } from 'react-router-redux';
+
+import configureStore, {history} from 'reduxes/configureStore';
+
 
 import FuncButtons from 'funcButtons/FuncButtons';
 import Board from 'drawingBoard/Board';
@@ -14,7 +18,6 @@ import Property from 'property/Property';
 import {loadImage} from 'reduxes/InitPhotosRedux';
 
 let store = configureStore();
-
 
 class App extends Component{
     constructor(props){
@@ -29,7 +32,7 @@ class App extends Component{
     render(){
 
         let {photosData, actions, curtPhoto} = this.props;
-        console.log(curtPhoto, 'curtPhoto');
+
         let { loadImage } = actions;
 
         return (
@@ -41,7 +44,7 @@ class App extends Component{
                         <ToolBox/>
                         <div className="col-lg-11 col-md-11 col-sm-11 col-xs-11 height">
                             <Board/>
-                            <FuncButtons/>
+                            {/* <FuncButtons/> */}
                         </div>
                         <Property
                             {...{
@@ -61,10 +64,11 @@ App = connect(
 )(App)
 
 ReactDOM.render(
-    <Provider
-        store={store}
-    >
-        <App/>
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
+            <Route path="/" component={App}/>
+        </ConnectedRouter>
+
     </Provider>
     ,
     document.getElementById('root')

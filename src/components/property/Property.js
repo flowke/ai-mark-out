@@ -1,37 +1,47 @@
 import S from './style.scss';
 import {connect} from 'react-redux';
 import {combineReducers, bindActionCreators} from 'redux';
-import * as actions from './PropertyRedux';
+
+import {finishFirst} from 'common/util/Util.js';
+import {selectShape, fixLayerHold, fixShapeFill} from 'drawingBoard/BoardRedux';
 
 import Tag from './tag';
 
 class Property extends Component{
     constructor(props){
         super(props);
-        this.layerName = 0;
+
     }
 
     render(){
 
-        let { tagsBoard, curtPhotoID, addTag, switchTag } = this.props;
+        let { paintingBoard, curtPhotoID, selectShape, fixLayerHold, fixShapeFill} = this.props;
 
         let tags = null;
 
+        if(paintingBoard && paintingBoard[curtPhotoID]){
 
-        if(tagsBoard && tagsBoard[curtPhotoID]){
+            let layerGroup =  paintingBoard[curtPhotoID];
 
-            let curtTag = tagsBoard[curtPhotoID].curtTag;
+            let {curtTag, selectedTag} = paintingBoard[curtPhotoID];
 
-            tags = tagsBoard[curtPhotoID].tags.map(elt=>{
+
+
+            tags = paintingBoard[curtPhotoID].layers.map(layer=>{
+                if(layer && curtTag===layer.id) {
+                    // points = layer.points;
+                    return;
+                };
                 return (
                     <Tag
                         {...{
-                            key: elt.id,
-                            id: elt.id,
-                            tagName: elt.tagName,
-                            curtPhotoID,
-                            switchTag,
-                            active: curtTag === elt.id
+                            key: layer.id,
+                            id: layer.id,
+                            tagName: layer.tagName,
+                            active: selectedTag === layer.id,
+                            selectShape,
+                            fixLayerHold,
+                            fixShapeFill
                         }}
                     />
                 )
@@ -40,11 +50,6 @@ class Property extends Component{
 
         return (
             <div className={S.showData}>
-                <div
-                    onClick={ev=> {
-                        addTag(curtPhotoID, {id: Math.random(), tagName: `图层:${this.layerName++}`})
-                    }}
-                >新建</div>
                 {tags}
             </div>
         );
@@ -53,10 +58,10 @@ class Property extends Component{
 
 export default connect(
     state => {
-        let {tagsBoard, curtPhoto} = state;
+        let {paintingBoard, curtPhoto} = state;
         return {
-            tagsBoard, curtPhotoID: curtPhoto.id
+            paintingBoard, curtPhotoID: curtPhoto.id
         }
     },
-    dispatch => bindActionCreators(actions, dispatch)
+    dispatch => bindActionCreators({selectShape, fixLayerHold, fixShapeFill}, dispatch)
 )(Property);
