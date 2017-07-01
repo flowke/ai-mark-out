@@ -39,7 +39,7 @@ export default class PaintingGroup extends Component{
     // end 对某个 layer 的修改
 
     mark(ev){
-        let {layersGroup:{layers, curtTag, selectedTag, holdingLayerID}, shape, addSpot, closeLine, addTempLayer, fixLayerHold, selectShape} = this.props;
+        let {layersGroup:{layers, curtTag, selectedTag, holdingLayerID}, shape, addSpot, closeLine, addTempLayer, fixLayerHold, selectShape, fixFirstSpotHit} = this.props;
 
         let layer = layers.reduce( (accu, elt)=>{
             return accu.id===curtTag ? accu : elt;
@@ -66,6 +66,7 @@ export default class PaintingGroup extends Component{
             if(layer.firstSpotHit && layer.points.length>2){
                 // let pointPos = this.getPointerPosition();
                 closeLine();
+                fixFirstSpotHit(false, null);
                 addTempLayer();
                 fixLayerHold(curtTag);
                 // console.log(ev);
@@ -197,8 +198,7 @@ export default class PaintingGroup extends Component{
         return (
             <div
                 ref="stageContainer"
-                className="stageContainer"
-                style={{position: "relative", width: '800px', height: '100%', overflow: 'auto'}}
+                className={S.stageContainer}
             >
 
                 <Stage

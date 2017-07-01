@@ -1,13 +1,15 @@
-require('bootstrap/dist/css/bootstrap.min.css');
-require('font-awesome/css/font-awesome.min.css');
+// require('bootstrap/dist/css/bootstrap.min.css');
+// require('font-awesome/css/font-awesome.min.css');
 require('style/main.scss');
+import S from './style.scss';
+import 'semantic-ui-css/semantic.min.css';
 import {Provider, connect} from 'react-redux';
 import {bindActionCreators, combineReducers} from 'redux';
 import { Route } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
+import { Grid, Image } from 'semantic-ui-react';
 
 import configureStore, {history} from 'reduxes/configureStore';
-
 
 import FuncButtons from 'funcButtons/FuncButtons';
 import Board from 'drawingBoard/Board';
@@ -36,16 +38,26 @@ class App extends Component{
         let { loadImage } = actions;
 
         return (
-            <div className="appRoot">
 
-                <PhotoGallery/>
-                <div className="container-fluid height">
-                    <div className="row height">
-                        <ToolBox/>
-                        <div className="col-lg-11 col-md-11 col-sm-11 col-xs-11 height">
-                            <Board/>
-                            {/* <FuncButtons/> */}
+            <div className={`${S.gridWrap}`}>
+                <div className={S.topRow}>
+                    <div className={S.logo}>
+                        <div className={S.imgWrap}>
+                            <a href="http://art.microbu.com"><img src={require("img/logo.png")} alt="miaov.com"/></a>
                         </div>
+                    </div>
+                    <div className={S.gallery}>
+                        <PhotoGallery/>
+                    </div>
+                </div>
+                <div className={S.bottomRow}>
+                    <div className={S.tool}>
+                        <ToolBox/>
+                        <a href=""></a>
+                        <div className="a"></div>
+                    </div>
+                    <div className={S.board}>
+                        <Board/>
                         <Property
                             {...{
                                 curtPhotoID: curtPhoto.id
@@ -59,9 +71,9 @@ class App extends Component{
 }
 
 App = connect(
-    state => state,
-    dispatch => ({actions: bindActionCreators({loadImage}, dispatch)})
-)(App)
+state => state,
+dispatch => ({actions: bindActionCreators({loadImage}, dispatch)})
+)( App );
 
 ReactDOM.render(
     <Provider store={store}>
@@ -73,3 +85,7 @@ ReactDOM.render(
     ,
     document.getElementById('root')
 );
+
+// if(module.hot){
+//     module.hot.accept();
+// }

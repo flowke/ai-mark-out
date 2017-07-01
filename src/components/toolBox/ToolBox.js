@@ -1,10 +1,11 @@
-
+import S from './style.scss';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {
     redoAPoint
 } from 'drawingBoard/BoardRedux';
 
+import {List, Button} from 'semantic-ui-react';
 
 import * as toolActions from './ToolBoxRedux';
 import * as stageActions from 'reduxes/StageRedux';
@@ -27,65 +28,60 @@ class ToolBox extends Component{
         } = this.props;
 
         return (
-            <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1 tool">
-                <div className="list-group">
-                    <button type="button" className="list-group-item list-group-item-info"
-                        onClick={ev=>incrementStage()}
-                    >
-                        <span className="fa fa-pencil"></span>
-                        <span className="hidden-sm hidden-xs">放大</span>
-                    </button>
-
-                    <button type="button" className="list-group-item list-group-item-info"
-                        onClick={ev=>decrementStage()}
-                    >
-                        <span className="fa fa-pencil"></span>
-                        <span className="hidden-sm hidden-xs">缩小</span>
-                    </button>
-
-                    <button type="button" className="list-group-item list-group-item-info"
-                        onClick={ev=>adaptStage()}
-                    >
-                        <span className="fa fa-pencil"></span>
-                        <span className="hidden-sm hidden-xs">适应</span>
-                    </button>
-
-                    <button type="button" className="list-group-item list-group-item-info"
-                        onClick={
-                            ev=>{
-                                changeShape(0);
-                            }
+            <ul className={S.toolButton}>
+                <li
+                    onClick={ev=>incrementStage()}
+                >
+                    <i></i>
+                    放大
+                </li>
+                <li
+                    onClick={ev=>decrementStage()}
+                >
+                    <i></i>
+                    缩小
+                </li>
+                <li
+                    onClick={ev=>adaptStage()}
+                >
+                    <i></i>
+                    适应
+                </li>
+                <li
+                    onClick={
+                        ev=>{
+                            changeShape(0);
                         }
-                    >
-                        <span className="fa fa-photo"></span>
-                        <span className="hidden-sm hidden-xs">点描</span>
-                    </button>
+                    }
+                >
+                    <i></i>
+                    点描
 
-                    <button type="button" className="list-group-item list-group-item-info"
-                        onClick={
-                            ev=>{
-                                changeShape(1);
-                            }
+                </li>
+                <li
+                    onClick={
+                        ev=>{
+                            changeShape(1);
                         }
-                    >
-                        <span className="fa fa-reorder"></span>
-                        <span className="hidden-sm hidden-xs">框选</span>
-                    </button>
+                    }
+                >
+                    <i></i>
+                    框选
+                </li>
 
-                    <button type="button" className="list-group-item list-group-item-info"
-                        onClick={ev => {
+                <li
+                    onClick={ev => {
 
-                            if( layersGroup && layersGroup.curtTag && shape === 0){
+                        if( layersGroup && layersGroup.curtTag && shape === 0){
 
-                                redoAPoint();
-                            }
-                        }}
-                    >
-                        <span className="fa fa-circle-o-notch"> </span>
-                        <span className="hidden-sm hidden-xs">上一步</span>
-                    </button>
-                </div>
-            </div>
+                            redoAPoint();
+                        }
+                    }}
+                >
+                    <i></i>
+                    上一步
+                </li>
+            </ul>
         );
     }
 }

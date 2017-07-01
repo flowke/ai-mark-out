@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {combineReducers, bindActionCreators} from 'redux';
 
 import {finishFirst} from 'common/util/Util.js';
-import {selectShape, fixLayerHold, fixShapeFill} from 'drawingBoard/BoardRedux';
+import { selectShape, fixLayerHold, fixShapeFill } from 'drawingBoard/BoardRedux';
 
 import Tag from './tag';
 
@@ -15,7 +15,7 @@ class Property extends Component{
 
     render(){
 
-        let { paintingBoard, curtPhotoID, selectShape, fixLayerHold, fixShapeFill} = this.props;
+        let { paintingBoard, curtPhotoID, selectShape, fixLayerHold, fixShapeFill } = this.props;
 
         let tags = null;
 
@@ -24,8 +24,6 @@ class Property extends Component{
             let layerGroup =  paintingBoard[curtPhotoID];
 
             let {curtTag, selectedTag} = paintingBoard[curtPhotoID];
-
-
 
             tags = paintingBoard[curtPhotoID].layers.map(layer=>{
                 if(layer && curtTag===layer.id) {
@@ -49,9 +47,9 @@ class Property extends Component{
         }
 
         return (
-            <div className={S.showData}>
+            <ul className={S.showData}>
                 {tags}
-            </div>
+            </ul>
         );
     }
 }

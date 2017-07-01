@@ -9,29 +9,33 @@ const history = createHistory();
 
 const routerML = routerMiddleware(history);
 
-const reducer = combineReducers({...rootReducer, ...{
-    router: routerReducer
-}});
-
 export {history};
 
 export default function configureStore() {
 
     if(process.env.NODE_ENV==='production'){
         return createStore(
-            reducer,
+            rootReducer,
             compose(
                 applyMiddleware(thunk,routerML)
             )
         );
     }else{
-        return createStore(
-            reducer,
+        const store = createStore(
+            rootReducer,
             compose(
                 applyMiddleware(thunk,routerML),
                 window.devToolsExtension ? window.devToolsExtension() : f=>f
             )
         );
+        // if (module.hot) {
+        //     // Enable Webpack hot module replacement for reducers
+        //     module.hot.accept('./reducers.js', () => {
+        //       const nextRootReducer = require('./reducers.js');
+        //       store.replaceReducer(nextRootReducer);
+        //     });
+        // }
+        return store;
     }
 
 

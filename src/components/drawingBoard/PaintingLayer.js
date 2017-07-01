@@ -57,8 +57,9 @@ export default class PaintingLayer extends Component{
                             x,
                             y,
                             radius: overPointIndex===i ? 8 : 6,
-                            fill: overPointIndex ===0 && i===0 && !closed ? null:'#00ff00',
-                            stroke: '#ff0000',
+                            fill: overPointIndex ===0 && i===0 && !closed ? null:'#fff',
+                            // fill: overPointIndex ===0 && i===0 && !closed ? null:'#000000',
+                            stroke: i===0?  '#ff0000' : 'black',
                             strokeWidth: 3,
                             draggable: true
                         }}
@@ -149,8 +150,8 @@ export default class PaintingLayer extends Component{
                             strokeWidth: 4,
                             lineJoin: 'round',
                             closed,
-                            fill : fill || selectedTag ===layerID ? 'rgba(255,0,0,0.3)': null ,
-                            listening: selectedTag ===layerID ? true : false
+                        fill : fill || selectedTag ===layerID ? 'rgba(255,0,0,0.3)': null ,
+                        listening: selectedTag ===layerID ? true : false
                     }}
                     // onMouseOver={ev=>{
                     //     // fixShapeFill(true, layerID)

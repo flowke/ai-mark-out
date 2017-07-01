@@ -7,8 +7,6 @@ const NEXT_PHOTO = 'NEXT_PHOTO';
 const PREVIOUS_PHOTO = 'PREVIOUS_PHOTO';
 
 
-
-
 export const switchPhoto = (photo) => (dispatch, getState)=>{
 
     let curtPhotoID = getState().curtPhoto.id;

@@ -36,6 +36,7 @@ export default class ClosedPrompt extends Component{
             window.alert('请填写有效标签名');
             return;
         }
+        
         alterShapeState({
             tagName, attrs, layerID: holdingLayerID, isDone: true
         });
@@ -63,18 +64,13 @@ export default class ClosedPrompt extends Component{
             <div className={S.closedPrompt}
                 style={{top: top, left:left}}
             >
-                <p>
-                    <input type="text" placeholder="name" value={tagNameVal}
-                        onChange={tagNameChange}
-                    />
-                </p>
-                <p>
-                    <textarea className={S.area}
-                        cols="30" rows="2" placeholder="attrs" value={attrVal}
-                        onChange={ev=>this.setState({attrVal: ev.target.value})}
-                    ></textarea>
-                </p>
-
+                <input type="text" placeholder="name" value={tagNameVal}
+                    onChange={tagNameChange}
+                />
+                <textarea className={S.area}
+                    cols="30" rows="2" placeholder="attrs" value={attrVal}
+                    onChange={ev=>this.setState({attrVal: ev.target.value})}
+                ></textarea>
                 <button
                     onClick={done}
                 >done</button>

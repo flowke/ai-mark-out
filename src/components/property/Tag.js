@@ -4,7 +4,7 @@ import { hintFinish } from 'common/util/Util.js';
 export default function Tag({id, tagName, active, selectShape, fixLayerHold, fixShapeFill}){
 
     return (
-        <div className={active ? S.active : ''}
+        <li className={active ? S.active : ''}
             onClick={ev=>{
                 selectShape(id);
             }}
@@ -13,6 +13,6 @@ export default function Tag({id, tagName, active, selectShape, fixLayerHold, fix
             }}
             onMouseOver={ev=>fixShapeFill(true, id)}
             onMouseOut={ev=>fixShapeFill(false, id)}
-        >{tagName}</div>
+        >{tagName}</li>
     );
 }

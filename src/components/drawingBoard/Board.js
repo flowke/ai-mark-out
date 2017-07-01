@@ -6,6 +6,8 @@ import PaintingGroup from './PaintingGroup';
 import PaintingLayer from './PaintingLayer';
 import * as actionCreators from './BoardRedux';
 
+import S from './style.scss';
+
 class Board extends Component{
     constructor(props){
         super(props);
@@ -51,7 +53,7 @@ class Board extends Component{
 
         return (
             <div
-                className="thumbnail img"
+                className={S.fl}
                 ref="container"
             >
                 <PaintingGroup
