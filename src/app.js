@@ -1,5 +1,8 @@
 // require('bootstrap/dist/css/bootstrap.min.css');
 // require('font-awesome/css/font-awesome.min.css');
+
+
+
 require('style/main.scss');
 import S from './style.scss';
 import 'semantic-ui-css/semantic.min.css';

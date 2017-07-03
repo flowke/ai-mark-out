@@ -344,7 +344,7 @@ export default function paintingBoard(state=initState, action){
                         firstSpotHit: false,
                         lineColor: color,
                         overPointIndex: null,
-                        shape: 0,
+                        // shape: 0,
                         firstTimeNewPoint: true,
                         attrs: '',
                         shapeType: null,

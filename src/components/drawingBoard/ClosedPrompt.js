@@ -36,7 +36,7 @@ export default class ClosedPrompt extends Component{
             window.alert('请填写有效标签名');
             return;
         }
-        
+
         alterShapeState({
             tagName, attrs, layerID: holdingLayerID, isDone: true
         });
@@ -57,9 +57,15 @@ export default class ClosedPrompt extends Component{
 
     render(){
         let { tagNameVal, attrVal } = this.state;
-        let { alterShapeState, holdingLayer,  fixLayerHold, shape } = this.props;
+        let { alterShapeState, holdingLayer,  fixLayerHold, shape, stageWidth, stageHeight } = this.props;
         let { tagNameChange, deleted, done, cancel, redoAPoint } = this;
+
         let {x: left, y: top} = holdingLayer.points[0];
+
+        left = stageWidth - left > 240 ? left : left - 230,
+        top = stageHeight - top > 210 ? top : top - 200;
+
+
         return (
             <div className={S.closedPrompt}
                 style={{top: top, left:left}}
@@ -82,8 +88,6 @@ export default class ClosedPrompt extends Component{
                         >undo</button>
                     ) : null
                 }
-
-
 
                 <button
                     onClick={deleted}

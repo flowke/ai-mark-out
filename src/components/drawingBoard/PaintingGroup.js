@@ -110,7 +110,6 @@ export default class PaintingGroup extends Component{
         // 加载图片
 
         // imgObj.src = url;
-
     }
 
     componentWillUnmount(){
@@ -312,7 +311,9 @@ export default class PaintingGroup extends Component{
                                 holdingLayerID,
                                 redoAPoint,
                                 fistTimeUnclose,
-                                shape
+                                shape,
+                                stageWidth,
+                                stageHeight
                             }}
                         />
                     ) : null

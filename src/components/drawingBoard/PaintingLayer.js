@@ -13,7 +13,6 @@ export default class PaintingLayer extends Component{
 
     }
 
-
     render(){
 
         let {
@@ -23,7 +22,7 @@ export default class PaintingLayer extends Component{
 
         let linePoints = [];
 
-        points.forEach(elt=>{
+        points.forEach( elt =>{
             linePoints.push(elt.x, elt.y);
         });
 
